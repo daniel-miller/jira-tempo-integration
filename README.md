@@ -70,8 +70,7 @@ For example:
 
 As you can see, the high-level code is relatively simple. It looks like this:
 
-```
-public async Task Run()
+```csharp public async Task Run()
 {
   var jira = new JiraClient(_settings);
 
@@ -90,7 +89,7 @@ public async Task Run()
 }
 ```
 
-You'll find the grit in the TempoClient and JiraClient classes.
+You'll find the grit in the [TempoClient](https://github.com/daniel-miller/jira-tempo-integration/blob/master/src/Extractor/Clients/TempoClient.cs) and [JiraClient](https://github.com/daniel-miller/jira-tempo-integration/blob/master/src/Extractor/Clients/JiraClient.cs) classes.
 
 When you send a request to the Tempo API for a list of [Worklogs](https://apidocs.tempo.io/#tag/Worklogs) it responds with a paged data set. You need to extra metadata from the response to determine the URL for requesting subsequent pages.
 
