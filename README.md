@@ -24,7 +24,7 @@ Both APIs are comprehensive and well-documented, but diving into the deep end ca
 
 It is important to note: The source code in this repository is almost certain NOT to work for your specific needs out-of-the-box. You'll need to get your hands a little dirty, with code changes that fit your specific Jira/Tempo implementation and configuration.
 
-### Getting Started
+## Getting Started with the APIs
 
 First, you'll need a Jira API key. You can generate a key here:
 
@@ -52,19 +52,23 @@ I want the output in a simple CSV format, so I can copy and paste to an Excel sp
 
 For example:
 
-Account,Hours
-Alpha Corporation,10.50
-Beta, Inc.,19.50
-Gamma Ltd.,10.00
+| Account           | Hours |
+|-------------------|-------|
+| Alpha Corporation | 10.50 |
+| Beta, Inc.        | 19.50 |
+| Gamma Ltd.        | 10.00 |
 
-Worker,Hours
-Alice,20.00
-Bob,8.00
-Carol,32.00
+
+| Worker       | Hours |
+|--------------|-------|
+| Mad Hatter   | 20.00 |
+| March Hare   |  8.00 |
+| Tweedle Dee  | 32.00 |
+
 
 ## Code Highlights
 
-As you can see, the high-level code is relatively simple:
+As you can see, the high-level code is relatively simple. It looks like this:
 
 ```
 public async Task Run()
