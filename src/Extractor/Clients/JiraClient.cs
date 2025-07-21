@@ -51,7 +51,10 @@ public class JiraClient : IJiraClient
 
                 issue.Summary = jsonResponse["fields"]?["summary"]?.ToString();
 
-                issue.Account = jsonResponse["fields"]?["customfield_10033"]?["value"]?.ToString();
+                var customfield = jsonResponse["fields"]?["customfield_10033"];
+
+                if (customfield != null && customfield.HasValues)
+                    issue.Account = customfield["value"]?.ToString();
 
                 // If the Account is blank then look for an account on the parent issue.
                 if (string.IsNullOrEmpty(issue.Account))

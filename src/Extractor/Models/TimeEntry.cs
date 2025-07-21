@@ -31,6 +31,6 @@ public class TimeEntry
         if (summary != null)
             summary = summary.Replace(",", ";").Replace("\n", " -- ").Replace("\r", " -- ");
 
-        return $"{Date},{Worker},{Hours:n2},{Account},{Type},{Issue},{Subtask},{Labels},{Summary}\n";
+        return $"{Date},{Worker},{Hours:n2},{Account},{Type},{Issue},{Subtask},{Labels},{Summary}";
     }
 }

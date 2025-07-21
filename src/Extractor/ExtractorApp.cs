@@ -17,18 +17,19 @@ public class ExtractorApp
 
         var entries = await tempo.GetTimeEntries(_settings.Since, _settings.Until);
 
-        var list = entries.OrderBy(x => x.Date)
+        BuildReports(entries);
+    }
+
+    private void BuildReports(TimeEntry[] entries)
+    {
+        var list = entries
+            .OrderBy(x => x.Date)
             .ThenBy(x => x.Worker)
             .ThenBy(x => x.Account)
             .ThenBy(x => x.Type)
             .ThenBy(x => x.Issue)
             .ToList();
 
-        BuildReports(list);
-    }
-
-    private void BuildReports(List<TimeEntry> list)
-    {
         var detail = new DetailReport(list);
 
         File.WriteAllText(_settings.DetailReportPath, detail.Text);
