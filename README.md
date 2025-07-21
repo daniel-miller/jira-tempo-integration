@@ -1,5 +1,7 @@
 ﻿# Jira-Tempo Integration
 
+This repository contains the source code for a .NET 9 console application that demonstrates integration with the Jira API and the Tempo API, to extract time entries per worker - including issue details with custom fields.
+
 ## Jira
 
 [Jira](https://www.atlassian.com/software/jira) is management information system developed by [Atlassian](https://www.atlassian.com/company) to help teams plan, track, and manage software development projects. Originally focused on bug tracking, Jira evolved into a robust platform that supports agile methodologies like [Scrum](https://en.wikipedia.org/wiki/Scrum_(software_development)) and [Kanban](https://en.wikipedia.org/wiki/Kanban_(development). It is especially popular among software development teams for its customizable workflows, integration capabilities, and detailed reporting features. As of 2025, Jira is used by over 180,000 customers, including major organizations like NASA, Cisco, and eBay, making it one of the most popular solutions to manage software product development and track software project issues.
@@ -22,7 +24,7 @@ Both APIs are comprehensive and well-documented, but diving into the deep end ca
 
 It is important to note: The source code in this repository is almost certain NOT to work for your specific needs out-of-the-box. You'll need to get your hands a little dirty, with code changes that fit your specific Jira/Tempo implementation and configuration.
 
-### Getting Started
+## Getting Started with the APIs
 
 First, you'll need a Jira API key. You can generate a key here:
 
@@ -50,22 +52,25 @@ I want the output in a simple CSV format, so I can copy and paste to an Excel sp
 
 For example:
 
-Account,Hours
-Alpha Corporation,10.50
-Beta, Inc.,19.50
-Gamma Ltd.,10.00
+| Account           | Hours |
+|-------------------|-------|
+| Alpha Corporation | 10.50 |
+| Beta, Inc.        | 19.50 |
+| Gamma Ltd.        | 10.00 |
 
-Worker,Hours
-Alice,20.00
-Bob,8.00
-Carol,32.00
+
+| Worker       | Hours |
+|--------------|-------|
+| Mad Hatter   | 20.00 |
+| March Hare   |  8.00 |
+| Tweedle Dee  | 32.00 |
+
 
 ## Code Highlights
 
-As you can see, the high-level code is relatively simple:
+As you can see, the high-level code is relatively simple. It looks like this:
 
-```
-public async Task Run()
+```csharp public async Task Run()
 {
   var jira = new JiraClient(_settings);
 
@@ -84,23 +89,25 @@ public async Task Run()
 }
 ```
 
-You'll find the grit in the TempoClient and JiraClient classes.
+You'll find the grit in the [TempoClient](https://github.com/daniel-miller/jira-tempo-integration/blob/master/src/Extractor/Clients/TempoClient.cs) and [JiraClient](https://github.com/daniel-miller/jira-tempo-integration/blob/master/src/Extractor/Clients/JiraClient.cs) classes.
 
 When you send a request to the Tempo API for a list of [Worklogs](https://apidocs.tempo.io/#tag/Worklogs) it responds with a paged data set. You need to extra metadata from the response to determine the URL for requesting subsequent pages.
 
 This bit of magic is handled here:
 
-[image]
+![image-1](https://github.com/user-attachments/assets/ef56a3ad-01f0-40af-9f49-b3cc8c82599e)
 
 If you are extracting a custom field value from a Jira issue, then you'll need to do some experimentation to identify the name assigned by Jira to your custom field.
 
 For example, I have a custom field named "Account", and the name assigned by Jira to this field is "customfield_10033". It is a little like an Easter egg hunt...
 
-Parsing the data you want from the Jira API is where you'll truly earn your keep as a developer. The parsing required for my case is pretty hairy:
+Parsing the data you want from the Jira API is where you'll truly earn your keep as a developer. The parsing required for my case is a little hairy...
 
-[image]
+![image-2](https://github.com/user-attachments/assets/594c76fd-47bb-48cc-a84b-89ed22270263)
 
-The good news is that it works. After you've identified the data you want, and after you've written the code that's needed to parse it from the API's response, you can run the app again and again for any date range that you need.
+... but it works **great**. 
+
+After you've identified the data you want, and after you've written the code that's needed to parse it from the API's response, you can run the app again and again for any date range that you need.
 
 This utility has proven to be a big help for our project managers and our billing department!
 
