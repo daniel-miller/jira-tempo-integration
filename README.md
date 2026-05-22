@@ -1,10 +1,10 @@
 ﻿# Jira-Tempo Integration
 
-This repository contains the source code for a .NET 9 console application that demonstrates integration with the Jira API and the Tempo API, to extract time entries per worker - including issue details with custom fields.
+This repository contains the source code for a .NET 10 console application that demonstrates integration with the Jira API and the Tempo API, to extract time entries per worker - including issue details with custom fields.
 
 ## Jira
 
-[Jira](https://www.atlassian.com/software/jira) is management information system developed by [Atlassian](https://www.atlassian.com/company) to help teams plan, track, and manage software development projects. Originally focused on bug tracking, Jira evolved into a robust platform that supports agile methodologies like [Scrum](https://en.wikipedia.org/wiki/Scrum_(software_development)) and [Kanban](https://en.wikipedia.org/wiki/Kanban_(development). It is especially popular among software development teams for its customizable workflows, integration capabilities, and detailed reporting features. As of 2025, Jira is used by over 180,000 customers, including major organizations like NASA, Cisco, and eBay, making it one of the most popular solutions to manage software product development and track software project issues.
+[Jira](https://www.atlassian.com/software/jira) is a management information system developed by [Atlassian](https://www.atlassian.com/company) to help teams plan, track, and manage software development projects. Originally focused on bug tracking, Jira evolved into a robust platform that supports agile methodologies like [Scrum](https://en.wikipedia.org/wiki/Scrum_(software_development)) and [Kanban](https://en.wikipedia.org/wiki/Kanban_(development). It is especially popular among software development teams for its customizable workflows, integration capabilities, and detailed reporting features. As of 2025, Jira is used by over 180,000 customers, including major organizations like NASA, Cisco, and eBay, making it one of the most popular solutions to manage software product development and track software project issues.
 
 ## Tempo
 
@@ -23,6 +23,12 @@ Fortunately, both Jira and Tempo provide an API to bridge the gap. You can write
 Both APIs are comprehensive and well-documented, but diving into the deep end can be intimidating. This project contains the source code you can use as a starting point for your own integration.
 
 It is important to note: The source code in this repository is almost certain NOT to work for your specific needs out-of-the-box. You'll need to get your hands a little dirty, with code changes that fit your specific Jira/Tempo implementation and configuration.
+
+## Prerequisites
+
+* [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) or later.
+* A Jira Cloud account with admin access (or permission to generate API tokens).
+* A Tempo subscription installed on the same Jira site.
 
 ## Getting Started with the APIs
 
@@ -70,22 +76,16 @@ For example:
 
 As you can see, the high-level code is relatively simple. It looks like this:
 
-```csharp public async Task Run()
+```csharp
+public async Task Run()
 {
-  var jira = new JiraClient(_settings);
+    var jira = new JiraClient(_settings);
 
-  var tempo = new TempoClient(_settings, jira);
+    var tempo = new TempoClient(_settings, jira);
 
-  var entries = await tempo.GetTimeEntries(_settings.Since, _settings.Until);
+    var entries = await tempo.GetTimeEntries(_settings.Since, _settings.Until);
 
-  var list = entries.OrderBy(x => x.Date)
-    .ThenBy(x => x.Worker)
-    .ThenBy(x => x.Account)
-    .ThenBy(x => x.Type)
-    .ThenBy(x => x.Issue)
-    .ToList();
-
-  BuildReports(list);
+    BuildReports(entries);
 }
 ```
 
